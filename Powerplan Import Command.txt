@@ -1,0 +1,1 @@
+powercfg -import "<Folder full path>\<file name>.pow"​
