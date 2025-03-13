@@ -28,5 +28,4 @@ reg add "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v 
 cd %~dp0
 powershell -Command "Get-ChildItem -Path $PSScriptRoot -Recurse | Unblock-File"
 echo Enabled PowerShell Scripts + Unblocked Files
-pause
 exit
