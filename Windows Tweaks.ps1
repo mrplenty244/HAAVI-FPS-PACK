@@ -1036,8 +1036,16 @@ E0,F6,C5,D5,0E,CA,50,00,00
 
 
 ; NVIDIA
-; enable old nvidia sharpening
+; enable old nvidia legacy sharpening
+; old location
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm\FTS]
+"EnableGR535"=dword:00000000
+
+; new location
+[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters\FTS]
+"EnableGR535"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm\Parameters\FTS]
 "EnableGR535"=dword:00000000
 
 
@@ -1143,11 +1151,17 @@ E0,F6,C5,D5,0E,CA,50,00,00
 "MouseSpeed"="0"
 "MouseThreshold1"="0"
 "MouseThreshold2"="0"
+
+; enable endtask menu taskbar w11
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings]
+"TaskbarEndTask"=dword:00000001
 "@
 Set-Content -Path "$env:TEMP\Registry Optimize.reg" -Value $MultilineComment -Force
 # edit reg file
 $path = "$env:TEMP\Registry Optimize.reg"
 (Get-Content $path) -replace "\?","$" | Out-File $path
+# disable optimize drives
+schtasks /Change /DISABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
 # import reg file
 Regedit.exe /S "$env:TEMP\Registry Optimize.reg"
 Clear-Host
@@ -2136,8 +2150,16 @@ Windows Registry Editor Version 5.00
 
 
 ; NVIDIA
-; old nvidia sharpening
+; disable old nvidia legacy sharpening
+; old location
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm\FTS]
+"EnableGR535"=dword:00000001
+
+; new location
+[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters\FTS]
+"EnableGR535"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm\Parameters\FTS]
 "EnableGR535"=dword:00000001
 
 
@@ -2233,11 +2255,17 @@ Windows Registry Editor Version 5.00
 "MouseSpeed"="1"
 "MouseThreshold1"="6"
 "MouseThreshold2"="10"
+
+; disable endtask menu taskbar w11
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings]
+"TaskbarEndTask"=dword:00000000
 "@
 Set-Content -Path "$env:TEMP\Registry Defaults.reg" -Value $MultilineComment -Force
 # edit reg file
 $path = "$env:TEMP\Registry Defaults.reg"
 (Get-Content $path) -replace "\?","$" | Out-File $path
+# enable optimize drives
+schtasks /Change /ENABLE /TN "\Microsoft\Windows\Defrag\ScheduledDefrag" | Out-Null
 # import reg file
 Regedit.exe /S "$env:TEMP\Registry Defaults.reg"
 Clear-Host
